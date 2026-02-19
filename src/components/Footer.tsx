@@ -84,7 +84,7 @@ export default function Footer() {
                 letterSpacing: "0.2em",
               }}
             >
-              © 2024 Starbucks Café. All rights reserved.
+              © 2026 Starbucks Café. All rights reserved.
             </p>
             <p
               className="text-white/20 text-[0.6rem] uppercase"

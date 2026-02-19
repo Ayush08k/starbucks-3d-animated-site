@@ -34,7 +34,7 @@ export default function AboutSection() {
                   className="text-black text-[0.6rem] font-bold uppercase tracking-widest leading-tight"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
-                  Est. 2024 NYC
+                  Est. 2026 NYC
                 </span>
               </div>
             </div>
