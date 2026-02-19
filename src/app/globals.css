@@ -1,27 +1,163 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --color-dark: #0E0E0E;
+  --color-dark-lighter: #1A1A1A;
+  --color-dark-card: #141414;
+  --color-accent: #C49A6C;
+  --color-accent-light: #D4AD82;
+  --color-espresso: #6F4E37;
+  --color-muted: #B5B5B5;
+  --color-white: #FFFFFF;
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-5: rgba(255, 255, 255, 0.05);
+
+  --font-playfair: 'Playfair Display', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* === BASE RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  background-color: #0E0E0E;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0E0E0E;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0E0E0E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C49A6C;
+  border-radius: 3px;
+}
+
+/* === FILM GRAIN OVERLAY === */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* === SELECTION === */
+::selection {
+  background: #C49A6C;
+  color: #0E0E0E;
+}
+
+/* === LETTER SPACING UTILITIES === */
+.tracking-luxury {
+  letter-spacing: 0.2em;
+}
+
+.tracking-ultra {
+  letter-spacing: 0.35em;
+}
+
+/* === GLASS MORPHISM === */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* === SECTION DIVIDER === */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C49A6C, transparent);
+}
+
+/* === CTA BUTTON === */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #0E0E0E;
+  background: #C49A6C;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cta:hover {
+  background: #D4AD82;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(196, 154, 108, 0.3);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-outline:hover {
+  border-color: #C49A6C;
+  color: #C49A6C;
+}
+
+/* === HIDE LENIS SCROLLBAR IF NEEDED === */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
