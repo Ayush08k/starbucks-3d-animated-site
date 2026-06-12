@@ -21,34 +21,40 @@ export function useCanvasSequence({
   const rafRef = useRef<number | null>(null);
   const loadedRef = useRef(false);
 
-  // Preload all frames
-  const preloadFrames = useCallback(() => {
-    const images: HTMLImageElement[] = [];
-    let loaded = 0;
-
-    return new Promise<HTMLImageElement[]>((resolve) => {
-      for (let i = 0; i < frameCount; i++) {
-        const img = new Image();
-        img.src = getFramePath(i + 1);
-        img.onload = img.onerror = () => {
-          loaded++;
-          if (loaded >= frameCount) {
-            resolve(images);
-          }
-        };
-        images[i] = img;
-      }
-    });
-  }, [frameCount, getFramePath]);
-
   // Draw a frame on the canvas
   const drawFrame = useCallback(
     (frameIndex: number) => {
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext("2d");
-      const img = imagesRef.current[frameIndex];
+      if (!canvas || !ctx) return;
 
-      if (!canvas || !ctx || !img || !img.complete) return;
+      // Find nearest loaded frame
+      let img: HTMLImageElement | undefined;
+      for (let offset = 0; offset < frameCount; offset++) {
+        const left = frameIndex - offset;
+        const right = frameIndex + offset;
+
+        if (
+          left >= 0 &&
+          imagesRef.current[left] &&
+          imagesRef.current[left].complete &&
+          imagesRef.current[left].naturalWidth !== 0
+        ) {
+          img = imagesRef.current[left];
+          break;
+        }
+        if (
+          right < frameCount &&
+          imagesRef.current[right] &&
+          imagesRef.current[right].complete &&
+          imagesRef.current[right].naturalWidth !== 0
+        ) {
+          img = imagesRef.current[right];
+          break;
+        }
+      }
+
+      if (!img) return;
 
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
@@ -83,7 +89,62 @@ export function useCanvasSequence({
 
       ctx.drawImage(img, drawX, drawY, drawW, drawH);
     },
-    [canvasRef]
+    [canvasRef, frameCount]
+  );
+
+  // Preload all frames progressively
+  const preloadFrames = useCallback(
+    (onKeyFramesLoaded: (images: HTMLImageElement[]) => void) => {
+      const images: HTMLImageElement[] = new Array(frameCount);
+      imagesRef.current = images;
+
+      // We will define keyframes (e.g. every 6th frame + first and last)
+      const keyFrameIndices = new Set<number>();
+      keyFrameIndices.add(0);
+      keyFrameIndices.add(frameCount - 1);
+      for (let i = 0; i < frameCount; i += 6) {
+        keyFrameIndices.add(i);
+      }
+
+      let keyFramesLoadedCount = 0;
+      let hasResolved = false;
+
+      // Load keyframes first
+      keyFrameIndices.forEach((i) => {
+        const img = new Image();
+        img.src = getFramePath(i + 1);
+        img.onload = img.onerror = () => {
+          keyFramesLoadedCount++;
+          if (loadedRef.current && i === currentFrameRef.current) {
+            drawFrame(i);
+          }
+          if (!hasResolved && keyFramesLoadedCount >= keyFrameIndices.size) {
+            hasResolved = true;
+            onKeyFramesLoaded(images);
+            // Start loading the rest in the background
+            loadBackgroundFrames();
+          }
+        };
+        images[i] = img;
+      });
+
+      // Background loader for remaining frames
+      const loadBackgroundFrames = () => {
+        for (let i = 0; i < frameCount; i++) {
+          if (keyFrameIndices.has(i)) continue;
+
+          const img = new Image();
+          img.src = getFramePath(i + 1);
+          img.onload = img.onerror = () => {
+            if (loadedRef.current && i === currentFrameRef.current) {
+              drawFrame(i);
+            }
+          };
+          images[i] = img;
+        }
+      };
+    },
+    [frameCount, getFramePath, drawFrame]
   );
 
   // Scroll handler
@@ -104,7 +165,7 @@ export function useCanvasSequence({
   }, [containerRef, frameCount, drawFrame]);
 
   useEffect(() => {
-    preloadFrames().then((images) => {
+    preloadFrames((images) => {
       imagesRef.current = images;
       loadedRef.current = true;
       drawFrame(0);

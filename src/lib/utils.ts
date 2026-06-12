@@ -12,5 +12,6 @@ export function lerp(start: number, end: number, factor: number): number {
 
 export function getSequencePath(index: number, total: number = 90): string {
   const frameNum = Math.min(Math.max(Math.round(index), 1), total);
-  return `/sequences/coffee/coffee-scroll_${String(frameNum).padStart(3, "0")}.jpg`;
+  return `/sequences/coffee/coffee-scroll_${String(frameNum).padStart(3, "0")}.webp`;
 }
+

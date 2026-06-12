@@ -7,10 +7,13 @@ import Header from "@/components/Header";
 import HeroCanvas from "@/components/HeroCanvas";
 import CoffeeStory from "@/components/CoffeeStory";
 import MenuGrid from "@/components/MenuGrid";
+import DrinkCustomizer from "@/components/DrinkCustomizer";
 import GallerySection from "@/components/GallerySection";
 import Testimonials from "@/components/Testimonials";
 import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
+import ToastContainer from "@/components/ToastContainer";
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -31,12 +34,16 @@ export default function Home() {
           <HeroCanvas />
           <CoffeeStory />
           <MenuGrid />
+          <DrinkCustomizer />
           <GallerySection />
           <Testimonials />
           <AboutSection />
           <Footer />
+          <CartDrawer />
+          <ToastContainer />
         </main>
       )}
     </>
   );
 }
+

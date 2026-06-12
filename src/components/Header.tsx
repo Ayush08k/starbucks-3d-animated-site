@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Story", href: "#story" },
   { label: "Menu", href: "#menu" },
+  { label: "Craft", href: "#customizer" },
   { label: "Gallery", href: "#gallery" },
   { label: "About", href: "#about" },
 ];
@@ -14,6 +16,7 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { cartCount, setCartOpen } = useCart();
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 80);
@@ -68,16 +71,30 @@ export default function Header() {
 
         {/* CTA + Mobile Toggle */}
         <div className="flex items-center gap-4">
-          <a
-            href="#menu"
-            className="hidden md:inline-flex btn-cta text-[0.6rem] py-3 px-6"
+          <button
+            onClick={() => setCartOpen(true)}
+            className="relative hidden md:inline-flex btn-cta text-[0.6rem] py-3 px-6 cursor-pointer"
           >
-            ORDER COFFEE
-          </a>
+            ORDER CART ({cartCount})
+          </button>
+
+          {/* Mobile Cart Icon */}
+          <button
+            onClick={() => setCartOpen(true)}
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-white hover:text-[#C49A6C] relative cursor-pointer"
+            aria-label="Cart"
+          >
+            <span className="text-lg">🛒</span>
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 w-4 h-4 bg-[#C49A6C] text-black text-[9px] font-bold rounded-full flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+            className="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 cursor-pointer"
             aria-label="Menu"
           >
             <motion.span
@@ -120,9 +137,15 @@ export default function Header() {
                   {link.label}
                 </a>
               ))}
-              <a href="#menu" className="btn-cta text-center text-[0.65rem] mt-4">
-                ORDER COFFEE
-              </a>
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  setCartOpen(true);
+                }}
+                className="btn-cta text-center text-[0.65rem] mt-4 cursor-pointer"
+              >
+                OPEN CART ({cartCount})
+              </button>
             </div>
           </motion.div>
         )}

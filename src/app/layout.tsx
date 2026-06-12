@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-[#0E0E0E] text-white antialiased" suppressHydrationWarning>{children}</body>
+      <body className="bg-[#0E0E0E] text-white antialiased" suppressHydrationWarning>
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }
+

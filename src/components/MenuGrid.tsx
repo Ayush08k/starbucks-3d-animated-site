@@ -4,9 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { menuData } from "@/data/menuData";
 import { fadeUp, staggerContainer, staggerItem } from "@/lib/animations";
+import { useCart } from "@/context/CartContext";
 
 export default function MenuGrid() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const { addToCart } = useCart();
 
   return (
     <section id="menu" className="relative min-h-screen py-32 md:py-44 bg-[#0E0E0E] flex flex-col justify-center overflow-hidden">
@@ -54,6 +56,7 @@ export default function MenuGrid() {
               }`}
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
+              onClick={() => addToCart(item)}
             >
               <div
                 className={`relative overflow-hidden ${
@@ -110,8 +113,8 @@ export default function MenuGrid() {
                     >
                       {item.price}
                     </span>
-                    <span className="text-[#C49A6C] text-xl transition-transform duration-300 group-hover:translate-x-1">
-                      →
+                    <span className="text-[#C49A6C] text-xs uppercase tracking-widest font-bold transition-all duration-300 group-hover:translate-x-1" style={{ fontFamily: "var(--font-mono)" }}>
+                      + Add to Order
                     </span>
                   </motion.div>
                 </div>

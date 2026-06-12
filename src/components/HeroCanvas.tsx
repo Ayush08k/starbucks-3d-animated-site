@@ -1,13 +1,21 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useCanvasSequence } from "@/hooks/useCanvasSequence";
 import { getSequencePath } from "@/lib/utils";
 
 export default function HeroCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const textY = useTransform(scrollYProgress, [0, 0.25], [0, -120]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   const getFramePath = useMemo(() => {
     return (index: number) => getSequencePath(index, 90);
@@ -36,7 +44,10 @@ export default function HeroCanvas() {
 
         {/* Hero Text Overlay */}
         <div className="absolute inset-0 flex items-center justify-start">
-          <div className="px-6 md:px-16 lg:px-24 max-w-3xl">
+          <motion.div
+            style={{ y: textY, opacity: textOpacity }}
+            className="px-6 md:px-16 lg:px-24 max-w-3xl"
+          >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -95,7 +106,7 @@ export default function HeroCanvas() {
                 OUR STORY
               </a>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Scroll Indicator */}
