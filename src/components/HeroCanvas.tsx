@@ -43,10 +43,10 @@ export default function HeroCanvas() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0E0E0E]/60 to-transparent" />
 
         {/* Hero Text Overlay */}
-        <div className="absolute inset-0 flex items-center justify-start">
+        <div className="absolute inset-0 flex items-center justify-center text-center">
           <motion.div
             style={{ y: textY, opacity: textOpacity }}
-            className="px-6 md:px-16 lg:px-24 max-w-3xl"
+            className="px-6 md:px-16 lg:px-24 max-w-3xl flex flex-col items-center"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -86,7 +86,7 @@ export default function HeroCanvas() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              className="text-white/50 text-sm md:text-base leading-relaxed mb-10 max-w-lg"
+              className="text-white/50 text-sm md:text-base leading-relaxed mb-10 max-w-lg mx-auto"
               style={{ fontFamily: "var(--font-inter)" }}
             >
               Experience artisan coffee like never before. Every cup is a
@@ -97,7 +97,7 @@ export default function HeroCanvas() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
-              className="flex gap-4 flex-wrap"
+              className="flex gap-4 flex-wrap justify-center"
             >
               <a href="#menu" className="btn-cta">
                 EXPLORE MENU

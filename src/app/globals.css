@@ -33,7 +33,7 @@ html {
 body {
   background-color: #0E0E0E;
   color: #FFFFFF;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter), sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
